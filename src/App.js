@@ -1,12 +1,19 @@
 import React, { Component } from "react";
 import axios from "axios";
+import Pagination from "./component/common/pagination";
+import paginate from "./utils/paginate";
 import "./App.css";
 
 class App extends Component {
   state = {
     posts: [],
+    pageSize: 4,
+    pageNumber: 1,
   };
 
+  handlePageChange = (pageNumber) => {
+    this.setState({ pageNumber: pageNumber });
+  };
   async componentDidMount() {
     const result = await axios("https://jsonplaceholder.typicode.com/posts");
     this.setState({ posts: result.data });
@@ -24,11 +31,16 @@ class App extends Component {
   };
 
   render() {
+    const { length: count } = this.state.posts;
+    const { pageNumber, pageSize, posts: allPosts } = this.state;
+
+    const posts = paginate(allPosts, pageNumber, pageSize);
     return (
       <React.Fragment>
         <button className="btn btn-primary" onClick={this.handleAdd}>
           Add
         </button>
+
         <table className="table">
           <thead>
             <tr>
@@ -38,7 +50,7 @@ class App extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.state.posts.map((post) => (
+            {posts.map((post) => (
               <tr key={post.id}>
                 <td>{post.title}</td>
                 <td>
@@ -60,6 +72,12 @@ class App extends Component {
               </tr>
             ))}
           </tbody>
+          <Pagination
+            pageSize={pageSize}
+            totalRecords={count}
+            onPageChange={this.handlePageChange}
+            pageNumber={pageNumber}
+          />
         </table>
       </React.Fragment>
     );
