@@ -7,7 +7,7 @@ import "./App.css";
 class App extends Component {
   state = {
     posts: [],
-    pageSize: 4,
+    pageSize: 10,
     pageNumber: 1,
   };
 
@@ -72,13 +72,13 @@ class App extends Component {
               </tr>
             ))}
           </tbody>
-          <Pagination
-            pageSize={pageSize}
-            totalRecords={count}
-            onPageChange={this.handlePageChange}
-            pageNumber={pageNumber}
-          />
         </table>
+        <Pagination
+          pageSize={pageSize}
+          totalRecords={count}
+          onPageChange={this.handlePageChange}
+          pageNumber={pageNumber}
+        />
       </React.Fragment>
     );
   }
