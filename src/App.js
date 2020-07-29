@@ -28,12 +28,19 @@ class App extends Component {
   };
 
   handleUpdate = async (post) => {
-    post.title = "Title Updated for " + post.id;
-    await axios.put(ApiEndPoint + "/" + post.id, post);
+    let originalPosts = this.state.posts;
     let posts = [...this.state.posts];
+    post.title = "Title Updated for " + post.id;
     let index = posts.indexOf(post);
     posts[index] = { ...post };
     this.setState({ posts });
+    try {
+      await axios.put(ApiEndPoint + "/" + post.id, post);
+      throw new Error("Something wrong in update");
+    } catch (error) {
+      this.setState({ posts: originalPosts });
+      alert(error);
+    }
   };
 
   handleDelete = async (post) => {
@@ -44,8 +51,8 @@ class App extends Component {
       await axios.delete(ApiEndPoint + "/" + post.id, post);
       throw new Error("Something wrong in Delete");
     } catch (error) {
-      alert(error);
       this.setState({ posts: originalPosts });
+      alert(error);
     }
   };
 
