@@ -4,6 +4,8 @@ import Pagination from "./component/common/pagination";
 import paginate from "./utils/paginate";
 import "./App.css";
 
+const ApiEndPoint = "https://jsonplaceholder.typicode.com/posts";
+
 class App extends Component {
   state = {
     posts: [],
@@ -15,15 +17,24 @@ class App extends Component {
     this.setState({ pageNumber: pageNumber });
   };
   async componentDidMount() {
-    const result = await axios("https://jsonplaceholder.typicode.com/posts");
+    const result = await axios(ApiEndPoint);
     this.setState({ posts: result.data });
   }
-  handleAdd = () => {
-    console.log("Add");
+  handleAdd = async () => {
+    let obj = { title: "new data", body: "new body" };
+    let { data: post } = await axios.post(ApiEndPoint, obj);
+    let posts = [post, ...this.state.posts];
+    this.setState({ posts });
   };
 
-  handleUpdate = (post) => {
-    console.log("Update", post);
+  handleUpdate = async (post) => {
+    post.title = "Title Updated for " + post.id;
+    let { data } = await axios.put(ApiEndPoint + "/" + post.id, post);
+    console.log(data);
+    let posts = [...this.state.posts];
+    let index = posts.indexOf(post);
+    posts[index] = { ...post };
+    this.setState({ posts });
   };
 
   handleDelete = (post) => {
