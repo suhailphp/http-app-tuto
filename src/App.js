@@ -29,10 +29,7 @@ class App extends Component {
 
   handleUpdate = async (post) => {
     post.title = "Title Updated for " + post.id;
-    //let { data } = await axios.put(ApiEndPoint + "/" + post.id, post);
-    let { data } = await axios.patch(ApiEndPoint + "/" + post.id, {
-      title: "Title Updated for " + post.id,
-    });
+    let { data } = await axios.put(ApiEndPoint + "/" + post.id, post);
     console.log(data);
     let posts = [...this.state.posts];
     let index = posts.indexOf(post);
