@@ -36,7 +36,7 @@ class App extends Component {
     this.setState({ posts });
     try {
       await axios.put(ApiEndPoint + "/" + post.id, post);
-      throw new Error("Something wrong in update");
+      //throw new Error("Something wrong in update");
     } catch (error) {
       posts[index] = { ...originalPost };
       this.setState({ posts });
