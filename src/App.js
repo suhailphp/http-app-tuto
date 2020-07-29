@@ -28,7 +28,7 @@ class App extends Component {
   };
 
   handleUpdate = async (post) => {
-    let originalPosts = this.state.posts;
+    let originalPost = { ...post };
     let posts = [...this.state.posts];
     post.title = "Title Updated for " + post.id;
     let index = posts.indexOf(post);
@@ -38,7 +38,8 @@ class App extends Component {
       await axios.put(ApiEndPoint + "/" + post.id, post);
       throw new Error("Something wrong in update");
     } catch (error) {
-      this.setState({ posts: originalPosts });
+      posts[index] = { ...originalPost };
+      this.setState({ posts });
       alert(error);
     }
   };
