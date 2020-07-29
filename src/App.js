@@ -9,7 +9,7 @@ const ApiEndPoint = "https://jsonplaceholder.typicode.com/posts";
 //this function for take all unexpected error Gobally. then no need to repeat everywhere
 axios.interceptors.response.use(
   (success) => {
-    console.log("API Call success", success);
+    //console.log("API Call success", success);
     return Promise.resolve(success);
   },
   (error) => {
