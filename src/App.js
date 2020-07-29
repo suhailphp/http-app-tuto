@@ -4,6 +4,8 @@ import config from "./config.json";
 import Pagination from "./component/common/pagination";
 import paginate from "./utils/paginate";
 import "./App.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 class App extends Component {
   state = {
@@ -25,9 +27,10 @@ class App extends Component {
       let { data: post } = await http.post(config.ApiEndPoint, obj);
       let posts = [post, ...this.state.posts];
       this.setState({ posts });
+      toast("New data added");
     } catch (ex) {
       if (ex.response && ex.response.status === 404) {
-        alert("Expected error occured");
+        toast.error("Expected error occured");
       }
     }
   };
@@ -41,10 +44,11 @@ class App extends Component {
     this.setState({ posts });
     try {
       await http.put(config.ApiEndPoint + "/" + post.id, post);
+      toast.success("Data updated");
       //throw new Error("Something wrong in update");
     } catch (ex) {
       if (ex.response && ex.response.status === 404) {
-        alert("Invalid post ");
+        toast.error("Invalid post ");
       }
       posts[index] = { ...originalPost };
       this.setState({ posts });
@@ -55,12 +59,14 @@ class App extends Component {
     let originalPosts = this.state.posts;
     let posts = this.state.posts.filter((p) => p.id !== post.id);
     this.setState({ posts });
+    toast("post deleted successfull");
     try {
       await http.delete(config.ApiEndPoint + "/" + post.id);
+      toast("post deleted successfull");
       //throw new Error("Something wrong in Delete");
     } catch (ex) {
       if (ex.response && ex.response.status === 404) {
-        alert("This post is already deleted");
+        toast.error("This post is already deleted");
       }
       this.setState({ posts: originalPosts });
     }
@@ -72,7 +78,8 @@ class App extends Component {
 
     const posts = paginate(allPosts, pageNumber, pageSize);
     return (
-      <React.Fragment>
+      <div>
+        <ToastContainer />
         <button className="btn btn-primary" onClick={this.handleAdd}>
           Add
         </button>
@@ -115,7 +122,7 @@ class App extends Component {
           onPageChange={this.handlePageChange}
           pageNumber={pageNumber}
         />
-      </React.Fragment>
+      </div>
     );
   }
 }
