@@ -1,29 +1,10 @@
 import React, { Component } from "react";
-import axios from "axios";
+import http from "./services/httpService";
 import Pagination from "./component/common/pagination";
 import paginate from "./utils/paginate";
 import "./App.css";
 
 const ApiEndPoint = "https://jsonplaceholder.typicode.com/posts";
-
-//this function for take all unexpected error Gobally. then no need to repeat everywhere
-axios.interceptors.response.use(
-  (success) => {
-    //console.log("API Call success", success);
-    return Promise.resolve(success);
-  },
-  (error) => {
-    const expectedError =
-      error.response &&
-      error.response.status >= 400 &&
-      error.response.status < 500;
-    if (!expectedError) {
-      alert("Unexpected error occured, please try again");
-      console.log("unexpectedError", error);
-    }
-    return Promise.reject(error);
-  }
-);
 
 class App extends Component {
   state = {
@@ -36,13 +17,13 @@ class App extends Component {
     this.setState({ pageNumber: pageNumber });
   };
   async componentDidMount() {
-    const result = await axios(ApiEndPoint);
+    const result = await http.get(ApiEndPoint);
     this.setState({ posts: result.data });
   }
   handleAdd = async () => {
     let obj = { title: "new data", body: "new body" };
     try {
-      let { data: post } = await axios.post(ApiEndPoint, obj);
+      let { data: post } = await http.post(ApiEndPoint, obj);
       let posts = [post, ...this.state.posts];
       this.setState({ posts });
     } catch (ex) {
@@ -60,7 +41,7 @@ class App extends Component {
     posts[index] = { ...post };
     this.setState({ posts });
     try {
-      await axios.put(ApiEndPoint + "/" + post.id, post);
+      await http.put(ApiEndPoint + "/" + post.id, post);
       //throw new Error("Something wrong in update");
     } catch (ex) {
       if (ex.response && ex.response.status === 404) {
@@ -76,7 +57,7 @@ class App extends Component {
     let posts = this.state.posts.filter((p) => p.id !== post.id);
     this.setState({ posts });
     try {
-      await axios.delete(ApiEndPoint + "/" + post.id);
+      await http.delete(ApiEndPoint + "/" + post.id);
       //throw new Error("Something wrong in Delete");
     } catch (ex) {
       if (ex.response && ex.response.status === 404) {
