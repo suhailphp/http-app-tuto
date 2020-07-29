@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import http from "./services/httpService";
+import config from "./config.json";
 import Pagination from "./component/common/pagination";
 import paginate from "./utils/paginate";
 import "./App.css";
-
-const ApiEndPoint = "https://jsonplaceholder.typicode.com/posts";
 
 class App extends Component {
   state = {
@@ -17,13 +16,13 @@ class App extends Component {
     this.setState({ pageNumber: pageNumber });
   };
   async componentDidMount() {
-    const result = await http.get(ApiEndPoint);
+    const result = await http.get(config.ApiEndPoint);
     this.setState({ posts: result.data });
   }
   handleAdd = async () => {
     let obj = { title: "new data", body: "new body" };
     try {
-      let { data: post } = await http.post(ApiEndPoint, obj);
+      let { data: post } = await http.post(config.ApiEndPoint, obj);
       let posts = [post, ...this.state.posts];
       this.setState({ posts });
     } catch (ex) {
@@ -41,7 +40,7 @@ class App extends Component {
     posts[index] = { ...post };
     this.setState({ posts });
     try {
-      await http.put(ApiEndPoint + "/" + post.id, post);
+      await http.put(config.ApiEndPoint + "/" + post.id, post);
       //throw new Error("Something wrong in update");
     } catch (ex) {
       if (ex.response && ex.response.status === 404) {
@@ -57,7 +56,7 @@ class App extends Component {
     let posts = this.state.posts.filter((p) => p.id !== post.id);
     this.setState({ posts });
     try {
-      await http.delete(ApiEndPoint + "/" + post.id);
+      await http.delete(config.ApiEndPoint + "/" + post.id);
       //throw new Error("Something wrong in Delete");
     } catch (ex) {
       if (ex.response && ex.response.status === 404) {
