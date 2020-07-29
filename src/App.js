@@ -49,7 +49,7 @@ class App extends Component {
     let posts = this.state.posts.filter((p) => p.id !== post.id);
     this.setState({ posts });
     try {
-      let res = await axios.delete(ApiEndPoint + "/" + post.id);
+      await axios.delete(ApiEndPoint + "/");
       //throw new Error("Something wrong in Delete");
     } catch (ex) {
       if (ex.response && ex.response.status === 404) {
