@@ -36,7 +36,7 @@ class App extends Component {
     this.setState({ pageNumber: pageNumber });
   };
   async componentDidMount() {
-    const result = await axios(ApiEndPoint);
+    const result = await axios("s" + ApiEndPoint);
     this.setState({ posts: result.data });
   }
   handleAdd = async () => {
