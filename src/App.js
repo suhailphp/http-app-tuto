@@ -6,6 +6,19 @@ import "./App.css";
 
 const ApiEndPoint = "https://jsonplaceholder.typicode.com/posts";
 
+//this function for take all unexpected error Gobally. then no need to repeat everywhere
+axios.interceptors.response.use(null, (error) => {
+  const expectedError =
+    error.response &&
+    error.response.status >= 400 &&
+    error.response.status < 500;
+  if (!expectedError) {
+    alert("Unexpected error occured, please try again");
+    console.log("unexpectedError", error);
+  }
+  return Promise.reject(error);
+});
+
 class App extends Component {
   state = {
     posts: [],
@@ -29,9 +42,6 @@ class App extends Component {
     } catch (ex) {
       if (ex.response && ex.response.status === 404) {
         alert("Expected error occured");
-      } else {
-        alert("Uexpected error occured, please try again");
-        console.log("Error Log ", ex);
       }
     }
   };
@@ -49,9 +59,6 @@ class App extends Component {
     } catch (ex) {
       if (ex.response && ex.response.status === 404) {
         alert("Invalid post ");
-      } else {
-        alert("Uexpected error occured, please try again");
-        console.log("Error Log ", ex);
       }
       posts[index] = { ...originalPost };
       this.setState({ posts });
@@ -67,13 +74,7 @@ class App extends Component {
       //throw new Error("Something wrong in Delete");
     } catch (ex) {
       if (ex.response && ex.response.status === 404) {
-        //Expected error -> this will happen only the post already deleted
         alert("This post is already deleted");
-      } else {
-        //unexpected error ->in this case all other errors are un expected, user no need to see it
-        alert("Uexpected error occured, please try again");
-        //log the original error and show the user a friendly message
-        console.log("Error Log ", ex);
       }
       this.setState({ posts: originalPosts });
     }
