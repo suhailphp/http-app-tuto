@@ -22,9 +22,18 @@ class App extends Component {
   }
   handleAdd = async () => {
     let obj = { title: "new data", body: "new body" };
-    let { data: post } = await axios.post(ApiEndPoint, obj);
-    let posts = [post, ...this.state.posts];
-    this.setState({ posts });
+    try {
+      let { data: post } = await axios.post(ApiEndPoint, obj);
+      let posts = [post, ...this.state.posts];
+      this.setState({ posts });
+    } catch (ex) {
+      if (ex.response && ex.response.status === 404) {
+        alert("Expected error occured");
+      } else {
+        alert("Uexpected error occured, please try again");
+        console.log("Error Log ", ex);
+      }
+    }
   };
 
   handleUpdate = async (post) => {
