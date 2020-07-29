@@ -37,10 +37,15 @@ class App extends Component {
     try {
       await axios.put(ApiEndPoint + "/" + post.id, post);
       //throw new Error("Something wrong in update");
-    } catch (error) {
+    } catch (ex) {
+      if (ex.response && ex.response.status === 404) {
+        alert("Invalid post ");
+      } else {
+        alert("Uexpected error occured, please try again");
+        console.log("Error Log ", ex);
+      }
       posts[index] = { ...originalPost };
       this.setState({ posts });
-      alert(error);
     }
   };
 
