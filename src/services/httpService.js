@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 //this function for take all unexpected error Gobally. then no need to repeat everywhere
 axios.interceptors.response.use(
   (success) => {
@@ -11,7 +12,7 @@ axios.interceptors.response.use(
       error.response.status >= 400 &&
       error.response.status < 500;
     if (!expectedError) {
-      alert("Unexpected error occured, please try again");
+      toast.error("Unexpected error occured, please try again");
       console.log("unexpectedError", error);
     }
     return Promise.reject(error);
