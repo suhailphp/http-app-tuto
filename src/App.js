@@ -59,7 +59,7 @@ class App extends Component {
     let originalPosts = this.state.posts;
     let posts = this.state.posts.filter((p) => p.id !== post.id);
     this.setState({ posts });
-    toast("post deleted successfull");
+    //toast("post deleted successfull");
     try {
       await http.delete(config.ApiEndPoint + "/" + post.id);
       toast("post deleted successfull");
