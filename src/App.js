@@ -61,7 +61,7 @@ class App extends Component {
     this.setState({ posts });
     //toast("post deleted successfull");
     try {
-      await http.delete("ss" + config.ApiEndPoint + "/" + post.id);
+      await http.delete(config.ApiEndPoint + "/" + post.id);
       toast("post deleted successfull");
       //throw new Error("Something wrong in Delete");
     } catch (ex) {
