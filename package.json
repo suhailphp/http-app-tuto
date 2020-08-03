@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@sentry/react": "^5.20.1",
     "axios": "^0.19.2",
     "bootstrap": "^4.1.2",
     "lodash": "^4.17.19",

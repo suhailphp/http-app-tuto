@@ -1,4 +1,5 @@
 import axios from "axios";
+import * as Sentry from "@sentry/react";
 import { toast } from "react-toastify";
 //this function for take all unexpected error Gobally. then no need to repeat everywhere
 axios.interceptors.response.use(
@@ -14,6 +15,7 @@ axios.interceptors.response.use(
     if (!expectedError) {
       toast.error("Unexpected error occured, please try again");
       console.log("unexpectedError", error);
+      Sentry.captureException("unexpectedError", error);
     }
     return Promise.reject(error);
   }

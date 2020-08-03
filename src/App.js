@@ -43,7 +43,7 @@ class App extends Component {
     posts[index] = { ...post };
     this.setState({ posts });
     try {
-      await http.put(config.ApiEndPoint + "/" + post.id, post);
+      await http.put(config.ApiEndPoint + "/", post);
       toast.success("Data updated");
       //throw new Error("Something wrong in update");
     } catch (ex) {
