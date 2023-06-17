@@ -18,8 +18,12 @@ class App extends Component {
     this.setState({posts})
   };
 
-  handleUpdate = post => {
-    console.log("Update", post);
+  handleUpdate = async post => {
+    post.title = 'Titel is updated';
+    let response = await axios.put(`https://jsonplaceholder.typicode.com/posts/${post.id}`,post)
+    let posts = [...this.state.posts]
+    posts[posts.indexOf(post)] = {...response.data}
+    this.setState({posts})
   };
 
   handleDelete = post => {
