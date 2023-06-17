@@ -27,9 +27,16 @@ class App extends Component {
   };
 
   handleDelete = async post => {
-    await axios.delete(`https://jsonplaceholder.typicode.com/posts/${post.id}`)
+    const originalPost = this.state.posts;
     let posts = this.state.posts.filter(p=>p.id !== post.id)
     this.setState({posts})
+    try{
+      await axios.delete(`https://jsonplaceholder.typicode.com/posts/${post.id}`)
+    }
+    catch(e){
+      alert('Something went wrong !')
+      this.setState({posts:originalPost})
+    }
   };
 
   render() {
