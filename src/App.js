@@ -2,6 +2,16 @@ import React, { Component } from "react";
 import axios from "axios";
 import "./App.css";
 
+axios.interceptors.response.use(null,error=>{
+  const expecedError = error.response && error.response.status >= 400 && error.response.status < 500;
+  console.log(expecedError)
+  if(!expecedError){
+    alert('An unexpected error occured!')
+    console.log('Error Logging:',error)
+  }
+  return Promise.reject(error)
+})
+
 class App extends Component {
   state = {
     posts: []
@@ -24,17 +34,18 @@ class App extends Component {
     let posts = [...this.state.posts]
     posts[posts.indexOf(post)] = {...response.data}
     this.setState({posts})
-  };
+  };  
 
   handleDelete = async post => {
     const originalPost = this.state.posts;
     let posts = this.state.posts.filter(p=>p.id !== post.id)
     this.setState({posts})
     try{
-      await axios.delete(`https://jsonplaceholder.typicode.com/posts/${post.id}`)
+      await axios.delete(`https://jsonplaceholder.typicode.com/postsss/${post.id}`)
     }
     catch(e){
-      alert('Something went wrong !')
+      if(e.response && e.response.status === 404)
+        alert('This post already delted!')
       this.setState({posts:originalPost})
     }
   };
