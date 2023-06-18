@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import http from './services/httpService'
 import config from './config.json'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import "./App.css";
-
-const apiEndpoint = config.apiEndpoint
 
 
 class App extends Component {
@@ -13,19 +13,19 @@ class App extends Component {
   };
 
   async componentDidMount(){
-    let response = await http.get(apiEndpoint)
+    let response = await http.get(config.apiEndpoint)
     this.setState({posts:response.data})
   }
   handleAdd = async() => {
     let obj = {title:'test',data:'test data'}
-    let response = await http.post(apiEndpoint,obj)
+    let response = await http.post(config.apiEndpoint,obj)
     let posts = [response.data,...this.state.posts]
     this.setState({posts})
   };
 
   handleUpdate = async post => {
     post.title = 'Titel is updated';
-    let response = await http.put(apiEndpoint+post.id,post)
+    let response = await http.put(config.apiEndpoint+post.id,post)
     let posts = [...this.state.posts]
     posts[posts.indexOf(post)] = {...response.data}
     this.setState({posts})
@@ -36,11 +36,11 @@ class App extends Component {
     let posts = this.state.posts.filter(p=>p.id !== post.id)
     this.setState({posts})
     try{
-      await http.delete(apiEndpoint+post.id)
+      await http.delete(config.apiEndpoint+'dsfds/'+post.id)
     }
     catch(e){
       if(e.response && e.response.status === 404)
-        alert('This post already delted!')
+       
       this.setState({posts:originalPost})
     }
   };
@@ -48,6 +48,7 @@ class App extends Component {
   render() {
     return (
       <React.Fragment>
+        <ToastContainer />
         <button className="btn btn-primary" onClick={this.handleAdd}>
           Add
         </button>
